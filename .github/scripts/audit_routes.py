@@ -18,14 +18,11 @@ accessors, meshes = gltf["accessors"], gltf["meshes"]
 # room connectivity. Coordinates are world X/Z after the Z-up conversion.
 OPENINGS = {
     "structure_23": ("x", [(4.25, 5.03)]),
-    "structure_28": ("z", [(-4.8, -4.0), (-7.8, -7.0)]),
-    "structure_30": ("z", [(-7.8, -7.0)]),
-    "structure_32": ("z", [(-10.9, -10.1)]),
-    "structure_33": ("z", [(-10.8, -10.0)]),
-    "structure_37": ("z", [(-11.0, -10.2)]),
-    "structure_31": ("x", [(2.0, 2.9)]),
-    "structure_36": ("x", [(8.7, 9.7)]),
-    "structure_35": ("x", [(4.5, 5.3)]),
+    "structure_28": ("z", [(-4.415, -3.635), (-7.415, -6.635)]),
+    "structure_30": ("z", [(-7.415, -6.635)]),
+    "structure_32": ("z", [(-10.515, -9.735)]),
+    "structure_33": ("z", [(-10.42, -9.64)]),
+    "structure_37": ("z", [(-10.62, -9.84)]),
 }
 RADIUS, STEP = 0.23, 0.10
 X_MIN, Z_MIN, NX, NZ = -0.5, -17.5, 135, 185

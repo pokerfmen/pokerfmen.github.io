@@ -53,14 +53,11 @@ function createPrimaryDoorOpenings(root){
      Additional passages restore the corridor links shown in the approved plan. */
   const specs=[
     {name:'structure_23',axis:'x',gaps:[[4.25,5.03]]},
-    {name:'structure_28',axis:'z',gaps:[[-4.8,-4.0],[-7.8,-7.0]]},
-    {name:'structure_30',axis:'z',gaps:[[-7.8,-7.0]]},
-    {name:'structure_32',axis:'z',gaps:[[-10.9,-10.1]]},
-    {name:'structure_33',axis:'z',gaps:[[-10.8,-10.0]]},
-    {name:'structure_37',axis:'z',gaps:[[-11.0,-10.2]]},
-    {name:'structure_31',axis:'x',gaps:[[2.0,2.9]]},
-    {name:'structure_36',axis:'x',gaps:[[8.7,9.7]]},
-    {name:'structure_35',axis:'x',gaps:[[4.5,5.3]]}
+    {name:'structure_28',axis:'z',gaps:[[-4.415,-3.635],[-7.415,-6.635]]},
+    {name:'structure_30',axis:'z',gaps:[[-7.415,-6.635]]},
+    {name:'structure_32',axis:'z',gaps:[[-10.515,-9.735]]},
+    {name:'structure_33',axis:'z',gaps:[[-10.42,-9.64]]},
+    {name:'structure_37',axis:'z',gaps:[[-10.62,-9.84]]}
   ];
   let wallsCut=0,segments=0;
   for(const spec of specs){

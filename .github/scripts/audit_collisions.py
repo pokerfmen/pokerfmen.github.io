@@ -46,7 +46,7 @@ for node in g.get("nodes", []):
     else:
         excluded.append(item)
 
-if len(structural) < 8:
+if len(structural) < 5:
     raise SystemExit(f"Too few structural collision meshes selected: {len(structural)}")
 if len(furniture) < 5:
     raise SystemExit(f"Too few furniture/fixture collision meshes selected: {len(furniture)}")

@@ -23,7 +23,9 @@ jobs:
         run: python3 .github/scripts/check_html.py
       - name: Audit primary GLB geometry
         run: python3 .github/scripts/audit_glb.py
-      - name: Check door marker alignment\n        run: python3 .github/scripts/check_doors.py\n      - name: Audit room connectivity
+      - name: Check door marker alignment
+        run: python3 .github/scripts/check_doors.py
+      - name: Audit room connectivity
         run: python3 .github/scripts/audit_routes.py
       - name: Upload geometry audit report
         uses: actions/upload-artifact@v4

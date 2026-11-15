@@ -25,7 +25,9 @@ jobs:
         run: python3 .github/scripts/audit_glb.py
       - name: Check door marker alignment
         run: python3 .github/scripts/check_doors.py
-      - name: Audit collision mesh selection\n        run: python3 .github/scripts/audit_collisions.py\n      - name: Audit room connectivity
+      - name: Audit collision mesh selection
+        run: python3 .github/scripts/audit_collisions.py
+      - name: Audit room connectivity
         run: python3 .github/scripts/audit_routes.py
       - name: Upload geometry audit report
         uses: actions/upload-artifact@v4
@@ -34,7 +36,8 @@ jobs:
           path: |
             .github/audit-report.json
             .github/primary-model.glb
-            .github/route-audit.json\n            .github/collision-audit.json
+            .github/route-audit.json
+            .github/collision-audit.json
           retention-days: 7
       - name: Setup Pages
         uses: actions/configure-pages@v5

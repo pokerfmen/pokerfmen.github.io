@@ -21,13 +21,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Audit primary GLB geometry
         run: python3 .github/scripts/audit_glb.py
-      - name: Audit room connectivity\n        run: python3 .github/scripts/audit_routes.py\n      - name: Upload geometry audit report
+      - name: Audit room connectivity
+        run: python3 .github/scripts/audit_routes.py
+      - name: Upload geometry audit report
         uses: actions/upload-artifact@v4
         with:
           name: primary-glb-audit
           path: |
             .github/audit-report.json
             .github/primary-model.glb
+            .github/route-audit.json
           retention-days: 7
       - name: Setup Pages
         uses: actions/configure-pages@v5

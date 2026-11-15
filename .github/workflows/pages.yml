@@ -19,7 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Check walkthrough JavaScript syntax\n        run: python3 .github/scripts/check_html.py\n      - name: Audit primary GLB geometry
+      - name: Check walkthrough JavaScript syntax
+        run: python3 .github/scripts/check_html.py
+      - name: Audit primary GLB geometry
         run: python3 .github/scripts/audit_glb.py
       - name: Audit room connectivity
         run: python3 .github/scripts/audit_routes.py

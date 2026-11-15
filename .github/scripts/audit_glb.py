@@ -56,4 +56,5 @@ report = {
 out = Path(".github/audit-report.json")
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+Path(".github/primary-model.glb").write_bytes(raw)
 print(f"GLB audit passed: {len(nodes)} nodes, {len(meshes)} meshes, {len(floors)} floors, {len(walls)} walls.")

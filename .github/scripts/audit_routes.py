@@ -32,9 +32,9 @@ X_MIN, Z_MIN, NX, NZ = -0.5, -17.5, 135, 185
 SPAWN = (4.7, -9.7)
 TARGETS = {
     "bedroom_1": (3.0, -2.5), "bedroom_2": (3.0, -6.8),
-    "bedroom_3": (6.8, -1.5), "bathroom_1": (8.0, -4.3),
+    "bedroom_3": (6.8, -1.5), "bathroom_1": (7.2, -4.3),
     "bathroom_2": (8.4, -6.7), "kitchen": (11.5, -4.3),
-    "living_room": (11.5, -7.2), "utility_room": (8.0, -10.5),
+    "living_room": (11.5, -7.2), "utility_room": (6.8, -10.5),
     "garage": (4.7, -13.5),
 }
 walls = []

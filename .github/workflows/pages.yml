@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: primary-glb-audit
-          path: .github/audit-report.json
+          path: .github/audit-report.json\n            - .github/primary-model.glb
           retention-days: 7
       - name: Setup Pages
         uses: actions/configure-pages@v5

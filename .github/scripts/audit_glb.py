@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Print deterministic spatial metadata from the shipped compressed GLB."""
+"""Audit the primary compressed GLB and write a machine-readable geometry report."""
 import gzip
 import json
 import struct
@@ -30,8 +30,7 @@ def bounds(node):
     pairs = [(lo[i] * scale[i] + translation[i], hi[i] * scale[i] + translation[i]) for i in range(3)]
     return [[min(a, b), max(a, b)] for a, b in pairs]
 
-floors = []
-walls = []
+floors, walls, objects = [], [], []
 for node in nodes:
     if "mesh" not in node:
         continue
@@ -44,12 +43,17 @@ for node in nodes:
         floors.append(item)
     if name.lower().startswith(("structure_", "outer_", "p_")):
         walls.append(item)
+    objects.append(item)
 
-print("PRIMARY_GLB_AUDIT")
-print(json.dumps({
+report = {
     "glb_bytes": len(raw),
     "nodes": len(nodes),
     "meshes": len(meshes),
     "floor_meshes": floors,
     "wall_meshes": walls,
-}, ensure_ascii=False, indent=2))
+    "mesh_bounds": objects,
+}
+out = Path(".github/audit-report.json")
+out.parent.mkdir(parents=True, exist_ok=True)
+out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+print(f"GLB audit passed: {len(nodes)} nodes, {len(meshes)} meshes, {len(floors)} floors, {len(walls)} walls.")

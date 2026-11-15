@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Прогулка по дому — Modern Minimalism</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#777;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;touch-action:none}
+#view{display:block;width:100%;height:100%;touch-action:none}
+#top{position:fixed;top:env(safe-area-inset-top,10px);left:10px;right:10px;z-index:3;color:#fff;background:#171717bd;padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4;pointer-events:none}
+#top b{font-size:14px}
+#start{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:#171717c9;padding:24px}
+#start .card{max-width:360px;background:#f4f0e8;color:#242321;border-radius:18px;padding:22px;text-align:center;box-shadow:0 12px 40px #0005}
+#start h1{font-size:21px;margin:0 0 10px}
+#start p{font-size:14px;line-height:1.5}
+button{border:0;border-radius:12px;background:#a88f6a;color:white;font-size:16px;font-weight:700;padding:14px 18px;touch-action:manipulation}
+#controls{position:fixed;inset:0;z-index:4;display:none;pointer-events:none}
+#stickBase{position:absolute;left:22px;bottom:calc(28px + env(safe-area-inset-bottom));width:132px;height:132px;border-radius:50%;background:#ffffff30;border:2px solid #ffffff88;pointer-events:auto;touch-action:none}
+#stick{position:absolute;left:39px;top:39px;width:50px;height:50px;border-radius:50%;background:#eee9dfdd;border:2px solid #fff;box-shadow:0 2px 10px #0005}
+#lookHint{position:absolute;right:16px;bottom:calc(28px + env(safe-area-inset-bottom));padding:9px 11px;border-radius:10px;background:#17171780;color:#fff;font-size:11px}
+#desktopHint{display:none}
+#loading{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#171717c9;color:white;padding:12px 16px;border-radius:10px;z-index:2}
+@media (hover:hover) and (pointer:fine){#desktopHint{display:block}#lookHint{display:none}}
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="loading">Загрузка 3D-дома…</div>
+<div id="top"><b>Modern Minimalism · прогулка по дому</b><br><span id="help">Телефон: левый джойстик — движение, проводите пальцем по правой части экрана — осмотр</span><span id="desktopHint"> · Компьютер: WASD + мышь</span></div>
+<div id="controls"><div id="stickBase"><div id="stick"></div></div><div id="lookHint">Проведите пальцем здесь,<br>чтобы осмотреться</div></div>
+<div id="start"><div class="card"><h1>Виртуальная прогулка по дому</h1><p>Модель открыта сверху, без крыши.<br><br><b>На телефоне:</b> управляйте движением джойстиком слева, а обзором — свайпом справа.<br><b>На компьютере:</b> WASD и мышь.</p><button id="enter">Войти в дом</button></div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/PointerLockControls.js';
+const canvas=document.querySelector('#view'),renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xb9b7b1);
+const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,200);camera.position.set(2.8,1.65,-3);
+scene.add(new THREE.HemisphereLight(0xffffff,0x777064,2.1));const sun=new THREE.DirectionalLight(0xffffff,2);sun.position.set(-8,18,-10);scene.add(sun);const fill=new THREE.DirectionalLight(0xffe6c5,.65);fill.position.set(8,8,8);scene.add(fill);
+const controls=new PointerLockControls(camera,document.body),isTouch=('ontouchstart'in window)||navigator.maxTouchPoints>0,overlay=document.querySelector('#start'),mobileControls=document.querySelector('#controls'),loading=document.querySelector('#loading');
+let modelReady=false,active=false;new GLTFLoader().load('./modern_minimalist_house.glb',g=>{g.scene.rotation.x=-Math.PI/2;scene.add(g.scene);modelReady=true;loading.style.display='none';},undefined,e=>{loading.textContent='Не удалось загрузить модель. Убедитесь, что modern_minimalist_house.glb загружен рядом с index.html.';console.error(e);});
+const keys={};addEventListener('keydown',e=>keys[e.code]=true);addEventListener('keyup',e=>keys[e.code]=false);
+document.querySelector('#enter').addEventListener('click',()=>{if(!modelReady){loading.style.display='block';return;}active=true;overlay.style.display='none';if(isTouch)mobileControls.style.display='block';else controls.lock();});
+controls.addEventListener('unlock',()=>{if(!isTouch&&active){overlay.style.display='flex';active=false;}});
+let joyId=null,joyX=0,joyY=0;const base=document.querySelector('#stickBase'),knob=document.querySelector('#stick');
+function updateJoy(e){const r=base.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const max=43,len=Math.hypot(dx,dy);if(len>max){dx=dx/len*max;dy=dy/len*max;}joyX=dx/max;joyY=dy/max;knob.style.transform=`translate(${dx}px,${dy}px)`;}
+base.addEventListener('pointerdown',e=>{joyId=e.pointerId;base.setPointerCapture(joyId);updateJoy(e);});base.addEventListener('pointermove',e=>{if(e.pointerId===joyId)updateJoy(e);});
+function releaseJoy(e){if(e.pointerId===joyId){joyId=null;joyX=joyY=0;knob.style.transform='translate(0,0)';}}base.addEventListener('pointerup',releaseJoy);base.addEventListener('pointercancel',releaseJoy);
+let lookId=null,lastX=0,lastY=0;canvas.addEventListener('pointerdown',e=>{if(!isTouch||!active||e.clientX<innerWidth*.42)return;lookId=e.pointerId;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(lookId);});
+canvas.addEventListener('pointermove',e=>{if(e.pointerId!==lookId)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;camera.rotation.order='YXZ';camera.rotation.y-=dx*.004;camera.rotation.x-=dy*.004;camera.rotation.x=Math.max(-1.35,Math.min(1.35,camera.rotation.x));});
+function releaseLook(e){if(e.pointerId===lookId)lookId=null;}canvas.addEventListener('pointerup',releaseLook);canvas.addEventListener('pointercancel',releaseLook);
+const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05);if(active){let forward=0,right=0;if(isTouch){forward=-joyY;right=joyX;}else{forward=(keys.KeyW?1:0)-(keys.KeyS?1:0);right=(keys.KeyD?1:0)-(keys.KeyA?1:0);}const length=Math.hypot(forward,right)||1;forward/=length;right/=length;const speed=2.25*dt;if(isTouch){const dir=new THREE.Vector3();camera.getWorldDirection(dir);dir.y=0;dir.normalize();const side=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize().negate();camera.position.addScaledVector(dir,forward*speed);camera.position.addScaledVector(side,right*speed);}else{controls.moveForward(forward*speed);controls.moveRight(right*speed);}}renderer.render(scene,camera);}
+animate();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+</script>
+</body></html>
